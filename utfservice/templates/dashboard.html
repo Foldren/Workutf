@@ -1,0 +1,152 @@
+{% load static %}
+{% include 'head.html' %}
+
+<body>
+    {{ js_file|safe }}
+    <script src="{% static 'js/jquery_classyqr_min.js' %}"></script>
+    {% include 'header_layout.html' %}
+
+    <div class="dashboard-content container col-lg-7 pt-5 p-4">
+        <section id="mainInfo" class="card border-0 w-100 pt-5 mt-lg-5 mt-3">
+            <h5 class="card-title pt-5 mt-2 pb-3 pt-lg-4 pb-lg-3 text-center">
+                <i class="bi bi-info-circle-fill text-primary p-1"></i> Основная информация
+                <button id="editMainInfoBtn" type="button" class="btn btn-sm btn-primary rounded-pill ms-3">
+                    <i class="bi bi-pencil-square"></i>
+                </button>
+            </h5>
+
+            <div class="card-body mt-lg-2 mt-0 pt-lg-4">
+                <div class="row mt-lg-1 mt-0">
+                    <span class="card-text col-6 col-lg-3 p-lg-2 p-3">Адрес:</span>
+                    <div class="row col-12 col-lg-6 align-items-center">
+                        <span class="text-primary ps-3 ps-lg-2">{{ filial.address }}</span>
+                    </div>
+                </div>
+                <div class="row mt-4">
+                    <span class="card-text col-6 col-lg-3 p-lg-2 p-3">Логотип:</span>
+                    <div class="col-12 col-lg-6">
+                        <img id="logotype_preview" src="{{ filial.logotype }}" height="129" width="129" class="col-lg-3 col-5 mb-4 rounded border">
+                        <input class="form-control mb-1" id="logotype" type="file" accept="image/*" name="logotype" readonly disabled>
+                        <small class="text-muted">Размер изображения до 300кБ</small>
+                    </div>
+                </div>
+                <div class="row mt-4">
+                    <span class="card-text col-6 col-lg-3 p-lg-2 p-3">Статус филиала:</span>
+                    <div class="col-12 col-lg-3">
+                        <div class="form-check form-switch mt-lg-1">
+                            <input type="hidden" name="statusFilial" form="mainInfoFilialForm" value="{{filial.status}}">
+                            <input class="form-check-input w-25 mt-lg-2" type="checkbox" id="statusFilial" {% if filial.status == 1 %} checked {% endif %} disabled>
+                            <div class="p-2">
+                                <small id="statusFilialLabel" class="{% if filial.status == 1 %} text-primary {% else %} text-muted {% endif %} p-2 disable">{% if filial.status == 1 %} Активирован {% else %} Невидимый {% endif %}</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        </section>
+
+        <section id="saveMainInfoFilial" class="row border-0 w-100 mt-5 justify-content-center">
+            <form id="mainInfoFilialForm" method="post" enctype="multipart/form-data" onsubmit="return false;">{% csrf_token %}</form>
+            <button id="saveMainInfoFilialBtn" class="btn btn-sm btn-primary rounded-pill bg-gradient col-lg-3 col-8 m-2" type="submit" form="mainInfoFilialForm">Сохранить изменения</button>
+        </section>
+
+        <section id="qrCode" class="card border-0 w-100 pt-5 mt-lg-5 mt-2">
+            <hr class="w-100">
+            <h5 class="card-title pt-3 mt-lg-4 pb-0 pt-lg-2 text-center">
+                <i class="bi bi-file-earmark-code-fill text-purple"></i></span> QR код
+            </h5>
+
+            <div class="card-body mt-lg-2 mt-0 pt-lg-2">
+                <div class="row mt-4">
+                    <span class="card-text col-6 col-lg-3 p-lg-2 p-3 pt-lg-5 mt-lg-3">Изображение:</span>
+                    <div class="col-12 col-lg-6">
+                        <div class="row align-items-center">
+                            <div id="qrGenerate" class="col-lg-4 col-5 p-0">
+                                <img id="qr-preview-image" class="w-100" src="{{filial.qr_code_img_url}}">
+                            </div>
+                            <div class="row align-items-center pt-4 col-lg-8 col-7 mb-4 ms-2">
+                                <a id="downloadQr" href="{{filial.qr_code_img_url}}" download class="btn btn-sm btn-warning col-lg-6 col-12 rounded-pill bg-gradient"><i class="bi bi-file-earmark-arrow-up-fill"></i> Скачать QR код</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mt-4">
+                    <span class="card-text col-6 col-lg-3 p-lg-2 p-3">Ссылка:</span>
+                    <div class="row align-items-center col-12 col-lg-6 ps-3">
+                        <a href="{{filial.qr_url}}" class="col-12 col-lg-10" id="qr_url">{{filial.qr_url}}</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="widgetCashback" class="card border-0 w-100 pt-5 mt-5">
+            <hr class="w-100">
+            <h5 class="card-title py-3 py-lg-4 text-center">
+                <i class="bi bi-coin text-warning p-1"></i> Виджет с кэшбеком
+                <button id="editWidgetCashBackBtn" type="button" class="btn btn-sm btn-primary rounded-pill ms-3">
+                    <i class="bi bi-pencil-square"></i>
+                </button>
+            </h5>
+            <div class="card-body mt-lg-2 mt-0 pt-lg-4">
+                <div class="row mt-lg-1 mt-0">
+                    <span class="card-text col-6 col-lg-3 p-lg-2 p-3">Тип начисления</span>
+                    <div class="col-12 col-lg-6 rounded-pill">
+                        <div id="typeCharge" class="btn-group" role="group">
+                            <input type="radio" class="btn-check" name="type_charge" value="0" form="saveWidgetForm" id="btnradio1" autocomplete="off" {% if filial.widget_type == 0 %} checked {% endif %} readonly disabled>
+                            <label class="btn btn-outline-secondary bg-gradient type-charge-label text-nowrap" for="btnradio1">В процентах</label>
+
+                            <input type="radio" class="btn-check" name="type_charge" value="1" form="saveWidgetForm" id="btnradio2" autocomplete="off" {% if filial.widget_type == 1 %} checked {% endif %} readonly disabled>
+                            <label class="btn btn-outline-secondary bg-gradient type-charge-label text-nowrap" for="btnradio2">В сумме</label>
+
+                            <input type="radio" class="btn-check" name="type_charge" value="2" form="saveWidgetForm" id="btnradio3" autocomplete="off" {% if filial.widget_type == 2 %} checked {% endif %} readonly disabled>
+                            <label class="btn btn-outline-secondary bg-gradient type-charge-label text-nowrap" for="btnradio3">Бесплатно</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-4">
+                    <span class="card-text col-8 col-lg-3 p-lg-2 p-3">Объем начисления</span>
+                    <div class="col-12 col-lg-6">
+                        <div class="input-group">
+                            <input class="form-control" type="number" name="volume_cashback" value="{{filial.widget_sum}}" form="saveWidgetForm" placeholder="Укажите сумму в рублях" readonly disabled>
+                            <span class="input-group-text">руб.</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="withMoreItems" class="card border-0 w-100 pt-5 mt-lg-1 mt-3">
+            <div class="card-body w-100 p-1">
+                <div class="accordion w-100 p-0 shadow-sm" id="accordionForMoreItems">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingQuestions">
+                            <button id="accord-questions-btn" class="accordion-button collapsed p-4" type="button" data-bs-toggle="collapse" data-bs-target="#collapseQuestions" aria-expanded="false" aria-controls="collapseQuestions">
+                                <h5 class="card-title"><i class="bi bi-patch-question-fill text-danger p-1"></i> Вопросы к виджету</h5>
+                            </button>
+                        </h2>
+                        <div id="collapseQuestions" class="accordion-collapse collapse" aria-labelledby="headingQuestions" data-bs-parent="#accordionForMoreItems">
+                            <div class="accordion-body">
+                                <button id="addQuestionBtn" class="btn btn-light w-100 mb-4" type="button"><i class="bi bi-plus p-1"></i> Добавить</button>
+                                {% for question in questions %}
+                                    <div class="question-div input-group mt-3">
+                                        <input class="question-input form-control" type="text" name="question" form="saveWidgetForm" value="{{question.content_text}}" placeholder="Заполните поле" required>
+                                        <button class="del-question-btn btn btn-danger" type="button"><i class="bi bi-x"></i></button>
+                                    </div>
+                                {% endfor %}
+                                <div id="max3QuestionMes" class="w-100 mt-4 text-muted text-center">Максимум 3 вопроса</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="saveWidget" class="row border-0 w-100 mt-5 justify-content-center">
+            <form id="saveWidgetForm" onsubmit="return false;">{% csrf_token %}</form>
+            <button id="saveChangesFilialEdit" class="btn btn-sm btn-primary rounded-pill bg-gradient col-lg-3 col-8 m-2" type="submit" form="saveWidgetForm">Сохранить виджет</button>
+        </section>
+    </div>
+
+    {% include 'footer.html' %}
+
+</body>

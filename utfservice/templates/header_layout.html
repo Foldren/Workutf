@@ -1,0 +1,169 @@
+{% load static %}
+{% load socialaccount %}
+
+<!-- Modal -->
+<aside class="modal fade" id="modalReg" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <form id="regModalWindowForm">
+                {% csrf_token %}
+                <div class="modal-header">
+                    <h5 class="modal-title text-center col-11" id="exampleModalLabel"><img id="regBlockImg" src="{% static 'images/favicon.png' %}">Данные регистрации</h5>
+                    <button type="button" class="btn-close col" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body row justify-content-center">
+                    <div class="col-lg-8 col-10 mb-3">
+                        <div id="loginError" class="form-text text-center text-danger invisible p-0">Код ошибки</div>
+                        <input type="text" name="login" class="form-control mt-2" placeholder="Логин" required>
+                        <div class="input-group my-3">
+                            <span class="input-group-text" id="basic-addon1">@</span>
+                            <input type="email" name="email" class="form-control" placeholder="Email" aria-label="Username" aria-describedby="basic-addon1" required>
+                        </div>
+                        <input type="password" name="password" class="form-control" placeholder="Пароль" required>
+                    </div>
+                    <div class="row col-lg-8 col-10 justify-content-center">
+                        <a href="social/login/vk-oauth2" class="btn btn-primary col-2 m-2">
+                            <i class="fab fa-vk"></i>
+                        </a>
+                        <a href="social/login/google-oauth2" class="btn btn-danger col-2 m-2">
+                            <i class="bi bi-google"></i>
+                        </a>
+                        <a href="social/login/yandex-oauth2" class="btn btn-light col-2 m-2">
+                            <i class="fab fa-yandex text-danger"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="modal-footer justify-content-center">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                    <button id="registrationButton" type="submit" class="btn btn-primary">
+                        <span id="registrationSpinner" class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+                        Зарегистрироваться
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</aside>
+
+<!--<aside class="modal fade" id="deleteFilialModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">-->
+<!--    <div class="modal-dialog modal-dialog-centered">-->
+<!--        <div class="modal-content">-->
+<!--            <div class="modal-header">-->
+<!--                <h5 class="modal-title">Подтвердите действие</h5>-->
+<!--                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>-->
+<!--            </div>-->
+<!--            <div class="modal-body">-->
+<!--                <p>Вы уверены что хотите удалить эту запись, без возможности восстановления.</p>-->
+<!--            </div>-->
+<!--            <div class="modal-footer">-->
+<!--                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Нет</button>-->
+                <!--<a href="{% url 'Rectop:dashboard-delete_filial' idFilial=idFilial %$}" class="btn btn-primary">Да уверен</a>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</aside>-->
+
+<nav class="navbar navbar-light navbar-expand-lg bg-white fixed-top border-bottom"><!-- sticky-top прикреплен к верху экрана (от края до края)-->
+	<div class="container-fluid"><!-- на всю ширину экрана -->
+		<a class="navbar-brand m-2 m-lg-3 pb-1" href="/"><!-- логотип -->
+			<img id="LogoImage" src="{% static 'images/Logo.png' %}">
+		</a>
+
+		<button id="mainNavbarToggler" class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive">
+			<span class="navbar-toggler-icon"></span>
+		</button> <!-- переключение навигации -->
+
+		<div class="navbar-collapse collapse" id="navbarResponsive"><!-- выпадающий список меню -->
+			<ul class="header-layout nav navbar-nav">
+				<li class="nav-item active m-2">
+			 		<a href="/" class="nav-link active" aria-current="page">Главная</a>
+			 	</li>
+			 	<li class="nav-item m-2">
+			 		<a href="" class="nav-link text-nowrap" aria-disabled="true">О нас</a>
+			 	</li>
+			 	<li class="nav-item m-2">
+			 		<a href="" class="nav-link">Наши услуги</a>
+			 	</li>
+			 	<li class="nav-item m-2">
+			 		<a href="/stores_list" class="nav-link">Тарифы</a>
+			 	</li>
+			 	<li class="nav-item m-2">
+			 		<a href="/stores_list" class="nav-link">Контакты</a>
+			 	</li>
+			 	<li class="nav-item m-2">
+			 		<a href="/stores_list" class="nav-link">FAQ</a>
+			 	</li>
+			 	<li class="nav-item reg-block pt-lg-1 m-1">
+			 	    <div class="row flex-nowrap m-0 p-0 h-100">
+			 	        <div class="row pb-0 mb-0 mt-1 mx-2 collapse" id="collapseLogData">
+    		 	            <form id="authorizationUserForm" class="w-50 pb-0 mb-0">
+    		 	                <div class="row col-lg-8 col-12 mb-0 pb-0 flex-lg-nowrap g-2">
+    			 	                <button id="EnterButton" type="submit" class="btn btn-sm btn-primary col-2 p-0 mx-2">
+    			 	                    <span id="logInSpinner" class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+                                        <i class="bi bi-box-arrow-in-right mr-3"></i>
+                                    </button>
+                                    <input class="form-control form-control-sm col-lg-4 col-6" type="text" name="username" placeholder="Логин">
+                                    <input class="form-control form-control-sm col-lg-4 col-6 mx-lg-2" type="password" name="password" placeholder="Пароль">
+                                    <a href="/social/login/vk-oauth2" class="btn btn-primary col-3 mx-1">
+                                        <i class="fab fa-vk"></i>
+                                    </a>
+                                    <a href="/social/login/google-oauth2" class="btn btn-danger col-3 mx-2">
+                                        <i class="bi bi-google"></i>
+                                    </a>
+                                    <a href="{% provider_login_url 'yandex' method='oauth2' %}"  class="btn btn-light col-3 mx-1">
+                                        <i class="fab fa-yandex text-danger"></i>
+                                    </a>
+                                </div>
+                                <div class="errorAuthMessage text-danger form-text w-100 fade position-absolute">Sometext</div>
+                            </form>
+                        </div>
+                        {% if not user.is_authenticated %}
+                            <button type="button" id="LogInButton" class="log-button btn btn-outline-primary bg-gradient rounded-circle m-2 m-lg-0" data-bs-toggle="collapse" data-bs-target="#collapseLogData" aria-expanded="false" aria-controls="collapseLogData">
+        			 			<i class="bi bi-arrow-right-circle-fill"></i>
+        			 		</button>
+    			 	        <button type="button" id="RegistrationButton" class="btn btn-outline-primary bg-gradient text-nowrap rounded-pill m-2 mt-lg-0 p-0 col-5 col-md-3 col-lg-12" data-bs-toggle="modal" data-bs-target="#modalReg">Регистрация</button>
+			 		    {% else %}
+                            <button type="button" id="LogOutButton" class="log-button btn btn-outline-danger bg-gradient rounded-circle m-2 m-lg-0">
+        			 			<span id="logOutSpinner" class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+        			 			<i class="bi bi-arrow-left-circle-fill"></i>
+        			 		</button>
+        			 		<div id="logOutRow" class="row align-items-center mb-lg-2 flex-nowrap col-lg-11 col-11 col-md-5 bg-gradient">
+        			 		    <a href="{% url 'Rectop:profile-list' %}" class="btn btn-primary rounded-pill bg-gradient">
+        			 		        <i class="bi bi-person-circle"></i>
+        			 		        Профиль: {{ user.username }}
+        			 		    </a>
+        			 		</div>
+			 		    {% endif %}
+			 		</div>
+			 	</li>
+			</ul>
+		</div>
+	</div>
+
+    {% if user.is_authenticated %}
+        <div id="instrumentsPanelAuthUser" class="row w-100 fixed-top mx-0">
+            <div class="collapse w-100 px-0" id="collapseInstruments">
+                <div class="card card-body rounded-0">
+                    <div class="row m-0 p-0 justify-content-center">
+                        <a class="btn btn-sm btn-primary rounded-pill bg-gradient col-lg-2 col-4" href="{% url 'Rectop:filials-list' %}">Филиалы</a>
+                        <a class="btn btn-sm btn-primary rounded-pill bg-gradient col-lg-2 col-3 mx-1" href="{% url 'Rectop:reviews-list' %}">Отзывы</a>
+                        <a class="btn btn-sm btn-primary rounded-pill bg-gradient col-lg-2 col-4 disabled" aria-disabled="true">Статистика</a>
+                    </div>
+                </div>
+            </div>
+            <button id="btnInstruments" class="btn btn-sm btn-light border bg-gradient rounded-pill col-lg-2 col-md-5 col-10 mx-auto" type="button" data-bs-toggle="collapse" data-bs-target="#collapseInstruments" aria-expanded="false" aria-controls="collapseInstruments">
+                <i class="bi bi-arrow-down"></i>
+                Открыть панель быстрого доступа
+                <i class="bi bi-arrow-down"></i>
+            </button>
+        </div>
+    {% endif %}
+
+	{% include 'alerts.html' %}
+
+</nav>
+
+
+
+
+

@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+    <body>
+        <div class="mx-auto">
+            <form id="verifyForm">
+                <span class="text-center">
+                    <span>{{ loginVal }}</span>, для подтверждения аккаунта, перейдите по ссылке:
+                </span>
+                <a href="{{site_url}}/auth_new_user?verifyCode={{ verifyCode }}">Подтвердить</a>
+            </form>
+        </div>
+    </body>
+</html>

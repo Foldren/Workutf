@@ -1,0 +1,40 @@
+#btnCloseReviewMobile {
+    margin-right: -20px;
+    border-top-left-radius: 30px;
+    border-bottom-left-radius: 30px;
+}
+
+.filial-image {
+    width: 60px;
+}
+
+body {
+    min-height: 950px;
+}
+
+.dontread {
+   font-size: 0.7em;
+}
+
+@media (min-width: 420px) {
+    #filialRates {
+        max-height: 700px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    }
+}
+
+@media (max-width: 419px) {
+    #filialRates {
+        height: auto;
+        overflow: hidden;
+    }
+
+    #openRate {
+        display: none;
+    }
+}
+
+.rate-platform-img {
+    border-radius: 12px;
+}

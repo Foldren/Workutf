@@ -1,0 +1,42 @@
+.text-purple {
+    color: #8b00ff;
+}
+
+#leftPanel {
+    width: 80px;
+    margin-top: 110px;
+}
+
+.offcanvas {
+   width: 200px;
+   margin-top: 110px;
+}
+
+@media (min-width: 992px) {
+    #statusFilial {
+        height: 50%;
+    }
+}
+
+@media (max-width: 992px) {
+    #statusFilial {
+        height: 80%;
+    }
+}
+
+#widgetCashback .dropdown-menu input {
+    float: right;
+}
+
+#widgetCashback .dropdown-menu label {
+    user-select: none;
+}
+
+#deleteFilial {
+    cursor: pointer;
+    font-size: 0.9em;
+}
+
+#logotype_preview {
+    object-fit: cover;
+}

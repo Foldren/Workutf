@@ -1,0 +1,175 @@
+{% load static %}
+{% include 'head.html' %}
+{% load utf_templatetags %}
+
+<body>
+    {{ js_file|safe }}
+    {% include 'header_layout.html' %}
+
+    <div class="container-fluid col-lg-10 pt-3 p-0 justify-content-center">
+        <section id="userInfo" class="row g-2 w-100 pt-5 mt-5 text-start">
+            <div class="col-lg-4 col-11 row mt-4 g-lg-2 g-0 flex-nowrap ms-lg-0 ms-3">
+                <div class="row align-items-center flex-nowrap p-lg-2 px-1">
+                    <input type="hidden" id="platform" value="{{platform}}">
+                    <input type="hidden" id="addressFilialInpt" value="{{address}}">
+
+                    <div class="col-3 text-nowrap">Филиалы:</div>
+                    <div class="col-lg-7 col-8">
+                        <select class="form-select form-select-sm">
+                            <option disabled>2GIS<img class="rate-platform-img p-2 col-10 border" src="{% static 'images/2gisLogo.png' %}"></option>
+                            {% for filial in filials %}
+                                <option {% if filial.id == filialId %} selected {% endif %}><a href="{% url 'Rectop:reviews-filial_reviews' idFilial=filialId %}">{{filial.address}}</a></option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-12 row mt-lg-4 mt-2 g-2 flex-nowrap">
+                <span class="py-1 col-9 col-lg-12 ms-lg-0 ms-3">Кол-во отзывов:<span class="text-primary p-1 rounded mx-2">{{ reviews|length }}</span></span>
+            </div>
+        </section>
+
+        <section id="panelToolsRates" class="row w-100 pt-2 mt-3">
+            <!--<hr class="w-100 mx-2">-->
+            <!--<a href="{$% url 'Dashboard:index' addFilial='add' %}" class="btn btn-sm btn-primary col-lg-2 col-md-6 col-6 px-1 m-4 mx-1 text-nowrap rounded-pill bg-gradient"><i class="bi bi-plus p-1"></i>Добавить филиал</a>-->
+            <!--<a href="" class="btn btn-sm btn-dark col-lg-2 col-md-6 col-5 text-nowrap m-4 mx-1 rounded-pill bg-gradient">Сменить тариф</a>-->
+        </section>
+
+        <section id="Rates" class="row g-0 col-12 border-top border-bottom">
+            <div id="filialRates" class="border-0 col-lg-5 col-md-6 col-12 px-1">
+                <div class="offcanvas offcanvas-start h-100 pt-1" tabindex="-1" id="offcanvas-review" aria-labelledby="offcanvasTopLabel">
+                    <div class="offcanvas-body p-0 overflow-hidden">
+                        <div class="card rate-open px-0 col-12 pb-5 h-100">
+                            <div class="row col-12 px-0 align-items-center ps-4 pt-4 py-3">
+                                <div class="col-2 p-1">
+                                    <img class="rate-platform-img p-2 col-12 border" src="{% static 'images/2gisLogo.png' %}">
+                                </div>
+                                <div id="addressFilial" class="h5 col-9 pt-1">Check Me out</div>
+                            </div>
+                            <hr class="w-100">
+                            <div class="row flex-nowrap col-11 m-3 align-items-center">
+                                <span class="col-8 ps-2 p-1"><img id="photo-profile-card" width="36" height="36" class="rate-platform-img border rounded-circle me-1 mb-1" src=""><span id="authorName" class="ms-1">Максим Федоров</span></span>
+                                <span class="col-4 text-end">
+                                    <span class="text-nowrap">
+                                        <i class="bi bi-calendar"></i>
+                                        <span id="dateReview" class="ms-1">22.05.2022</span>
+                                    </span>
+                                    <span class="text-nowrap">
+                                        <i class="bi bi-clock-history ps-3"></i>
+                                        <span id="timeReview" class="ms-1">13:25</span>
+                                    </span>
+                                </span>
+                            </div>
+                            <div class="row justify-content-start ps-4 pb-2">
+                                <div id="starRate" class="number-stars flex-nowrap"></div>
+                            </div>
+                            <div class="row card-body p-4">
+                                <div id="contentReview"></div>
+                            </div>
+                            <div class="offcanvas-header justify-content-end">
+                                <button id="btnCloseReviewMobile" type="button" class="btn btn-primary btn-lg" data-bs-dismiss="offcanvas" aria-label="Закрыть"><i class="bi bi-arrow-left"></i></button>
+                            </div>
+                            <div class="buttons-rate px-4 pt-4">
+                                <a href="" class="btn btn-primary me-2 disabled" disabled>Ответить</a>
+                                <a id="urlRate" href="" class="btn btn-light"><i class="bi bi-link"></i> Ссылка на источник</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% for review in reviews %}
+                    <div class="review-object card rate-position col-12 px-3 pe-0 my-3 px-3 shadow"
+                         data-prof-photo="{{ review.profile_photo_url }}"
+                         data-rate-url="{{ review.author_url }}"
+                         data-auth-name="{{ review.author_name }}"
+                         data-full-datetime="{{ review.time|date:'Y-m-d\TH:i:s' }}">
+
+                        <div class="mt-4 mb-3 row col-12 align-items-center pe-0 ">
+                            <div class="ms-1 col-12">
+                                <!--<input type="checkbox" class="form-check-input mt-2" id="checkRate{{forloop.counter0}}">-->
+                                <label class="card-title h5 form-check-label p-1 text-truncate" for="checkRate{{forloop.counter0}}">{{ review.filial.address }}</label>
+                            </div>
+                            <div class="col-10 ms-2 row flex-nowrap mb-3">{{ name_organization }}</div>
+                            <div class="row ms-3 g-2 col-12">
+                                <div class="col-lg-5 row flex-nowrap">Добавлен: <span class="text-primary me-lg-3 text-nowrap">{{ review.time|timesince }} назад</span></div>
+                                <div class="col-lg-6 row ms-lg-5 my-3 mt-lg-0">
+                                    Статус:
+                                    {% if review.status == 0 or review.status == None %}
+                                        <div class="col-4 m-1 ms-2 p-1 badge rounded-pill bg-secondary">
+                                            Не прочитано
+                                        </div>
+                                    {% elif review.status == 1 %}
+                                        <div class="col-4 m-1 ms-2 p-1 badge rounded-pill bg-primary">
+                                            Прочитано
+                                        </div>
+                                    {% elif review.status == 2 %}
+                                        <div class="col-4 m-1 ms-2 p-1 badge rounded-pill bg-success">
+                                            С ответом
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="rate-line row col-7 flex-nowrap p-2 align-items-center">
+                            <div class="col-lg-2 col-4 pe-0">
+                                <img class="rate-platform-img p-2 col-10 border" src="
+                                    {% if platform == 0 %}
+                                        {% static 'images/yandexLogo.png' %}
+                                    {% elif platform == 1 %}
+                                        {% static 'images/2gisLogo.png' %}
+                                    {% elif platform == 2 %}
+                                        {% static 'images/googleLogo.png' %}
+                                    {% endif %}">
+
+                            </div>
+                            <div class="filial-rate-star number-stars col-lg-7 col-10 ps-1">
+                                <span class="fs-5 text-warning">{{ review.rating }}</span>
+                                {% if review.rating|to_int >= 1 %} <i class="bi text-warning bi-star-fill"></i> {% else %} <i class="bi text-warning bi-star"></i> {% endif %}
+                                {% if review.rating|to_int >= 2 %} <i class="bi text-warning bi-star-fill"></i> {% else %} <i class="bi text-warning bi-star"></i> {% endif %}
+                                {% if review.rating|to_int >= 3 %} <i class="bi text-warning bi-star-fill"></i> {% else %} <i class="bi text-warning bi-star"></i> {% endif %}
+                                {% if review.rating|to_int >= 4 %} <i class="bi text-warning bi-star-fill"></i> {% else %} <i class="bi text-warning bi-star"></i> {% endif %}
+                                {% if review.rating|to_int == 5 %} <i class="bi text-warning bi-star-fill"></i> {% else %} <i class="bi text-warning bi-star"></i> {% endif %}
+                            </div>
+                        </div>
+                        <div class="card-body p-lg-2 p-3 mb-3">
+                            <div class="reviewText card-text">{{ review.content }}</div>
+                        </div>
+                        <div class="row p-4">
+                            <button class="open-review btn btn-sm rounded-pill btn-primary col-6 col-lg-4" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvas-review" aria-controls="offcanvas-review">Перейти к отзыву</button>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+
+            <div id="openRate" class="border-0 col-lg-7 col-6">
+                <div id="noChooseReviews" class="row text-muted w-100 h-100 align-items-center justify-content-center">Не выбрано ни одного отзыва</div>
+                <div class="card rate-open px-0 col-12 pb-5 h-100 d-none">
+                    <div class="row px-0 flex-nowrap align-items-center pt-4 py-3">
+                        <div class="row align-items-center col-3 ms-3 pe-0">
+                            <img class="rate-platform-img p-1 col-2 border mb-1" src="{% static 'images/2gisLogo.png' %}">
+                            <span id="name-platform-card" class="col-10 mb-1">2GIS</span>
+                        </div>
+                        <span class="col-4"><img id="photo-profile-card" width="36" height="36" class="rate-platform-img border rounded-circle me-1 mb-1" src=""><span id="authorName" class="ms-1">Максим Федоров</span></span>
+                        <span class="col-4 text-end"><i class="bi bi-calendar"></i> <span id="dateReview" class="ms-1">22.05.2022</span><i class="bi bi-clock-history ps-3"></i><span id="timeReview" class="ms-1">13:25</span></span>
+                    </div>
+                    <hr class="w-100">
+                    <div class="row flex-nowrap col-11 m-3">
+                        <div id="addressFilial" class="card-title h5 col-6">Check Me out</div>
+                        <div id="starRate" class="number-stars col-5 ps-3 flex-nowrap text-end">
+                        </div>
+                    </div>
+                    <div class="row card-body p-4">
+                        <div id="contentReview"></div>
+                    </div>
+                    <div class="buttons-rate px-4 pt-4">
+                        <a href="" class="btn btn-primary me-2 disabled" disabled>Ответить</a>
+                        <a id="urlRate" href="" class="btn btn-light"><i class="bi bi-link"></i> Ссылка на источник</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    {% include 'footer.html' %}
+
+</body>

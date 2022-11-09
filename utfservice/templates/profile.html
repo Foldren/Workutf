@@ -1,0 +1,180 @@
+{% load static %}
+{% include 'head.html' %}
+
+<body>
+    {% include 'header_layout.html' %}
+
+    <div class="dashboard-content container col-lg-7 pt-5 mt-5 p-0">
+        <form id="profileForm" class="d-none" onsubmit="return false;">{% csrf_token %}</form>
+
+        <section id="mainInfo" class="card border-0 w-100 pt-5 mt-lg-5 mt-3 px-4">
+            <h5 class="card-title py-3 py-lg-4 text-center user-select-none">
+                <i class="bi bi-info-circle-fill text-primary p-1"></i> Данные авторизации
+                <button id="editAuthDataBtn" type="button" class="btn btn-sm btn-primary rounded-pill ms-3">
+                    <i class="bi bi-pencil-square"></i>
+                </button>
+            </h5>
+
+            <div class="card-body mt-lg-2 mt-0 pt-lg-4">
+                <div class="row mt-lg-1 mt-0">
+                    <span class="card-text col-6 col-lg-3 p-lg-1 p-3">Логин</span>
+                    <div class="col-12 col-lg-6">
+                        <input class="form-control mb-1 auth-data" type="text" form="profileForm" value="{{user.username}}" readonly name="nameUser" placeholder="Введите логин" required>
+                    </div>
+                </div>
+                <!--<div class="row mt-lg-1 mt-0 justify-content-center">-->
+                <!--    <div class="col-12 col-lg-6">-->
+                <!--        <button id="changePasswordBtn" class="btn btn-warning rounded-pill mt-4" type="button"><i class="bi bi-key p-1"></i> Сменить пароль</button>-->
+                <!--        <div class="mt-2 ms-1">-->
+                <!--            <small class="text-muted user-select-none">Мы отправим на почту код для изменения пароля.</small>-->
+                <!--        </div>-->
+                <!--    </div>-->
+                <!--</div>-->
+            </div>
+        </section>
+
+
+        <section id="additionalInfo" class="card border-0 w-100 pt-lg-0 pt-5 mt-lg-5 mt-3 px-4">
+            <h5 class="card-title py-3 py-lg-4 text-center user-select-none">
+                <i class="bi bi-person-badge-fill text-danger p-1"></i> Контактные данные
+                <button id="editContactDataBtn" type="button" class="btn btn-sm btn-primary col-8 rounded-pill ms-3">
+                    <i class="bi bi-pencil-square"></i>
+                </button>
+            </h5>
+            <div class="card-body mt-lg-2 mt-0 pt-lg-4">
+                <div class="row mt-lg-1 mt-0">
+                    <span class="card-text col-8 col-lg-3 p-lg-1 p-3">Название организации</span>
+                    <div class="col-12 col-lg-6">
+                        <input class="form-control mb-1 contact-data" type="text" form="profileForm" value="{{additional_data_profile.name_organization}}" readonly name="nameOrganization" placeholder="Введите название организации" required>
+                    </div>
+                </div>
+                <div class="row mt-4">
+                    <span class="card-text col-6 col-lg-3 p-lg-1 p-3">Email</span>
+                    <div class="col-12 col-lg-6">
+                        <input class="form-control mb-1 contact-data" type="text" form="profileForm" value="{{user.email}}"  readonly name="email" placeholder="Введите почту" required>
+                    </div>
+                </div>
+                <div class="row mt-4">
+                    <span class="card-text col-6 col-lg-3 p-lg-1 p-3">Телефон</span>
+                    <div class="col-12 col-lg-6">
+                        <input class="form-control mb-1 contact-data" type="text" form="profileForm" value="{{additional_data_profile.phone_number}}" readonly name="number" placeholder="Введите телефон" required>
+                    </div>
+                </div>
+                <div class="row mt-4">
+                    <span class="card-text col-6 col-lg-3 p-lg-1 p-3">Имя</span>
+                    <div class="col-12 col-lg-6">
+                        <input class="form-control mb-1 contact-data" type="text" form="profileForm" value="{{additional_data_profile.full_name}}" readonly name="full_name" placeholder="Введите полное имя" required>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="sectionWithBtnsProfile" class="row border-0 w-100 mt-3 pt-5 justify-content-center">
+            <button id="saveChangesProfile" class="btn btn-sm btn-primary rounded-pill bg-gradient col-lg-3 col-8 m-2" type="submit" form="profileForm">Сохранить изменения</button>
+        </section>
+
+        <section id="connectBusinessProfiles" class="card border-0 w-100 pt-3 mt-5">
+            <h5 class="card-title py-3 py-lg-4 text-center mb-4"><i class="bi bi-briefcase-fill text-warning p-1"></i> Подключенные бизнес профили</h5>
+
+            <h6 class="my-3 text-muted ms-3 px-3">Правила подключения филиалов к платформе:</h6>
+            <ol class="list-group list-group-numbered mb-5 pb-5 px-3">
+                <li class="list-group-item border-0 text-muted">Новые филиалы подгружаются раз в день для каждого профиля.</li>
+                <li class="list-group-item border-0 text-muted">При подключении будьте внимательны, удалить и изменить филиалы, профили нельзя.</li>
+                <li class="list-group-item border-0 text-muted">При переезде филиала, адреса обновятся на нашей платформе.</li>
+            </ol>
+
+
+            <ul id="navPlatforms" class="nav nav-tabs ps-3 col-12">
+                <li class="nav-item">
+                    <label for="yandexPlatformRadio" class="platform-radio-label nav-link active shadow-sm">
+                        <img class="platform-image my-1" src="{% static 'images/yandexLogo.png' %}">
+                        <input id="yandexPlatformRadio" name="platformRadio" class="d-none" type="radio" value="0" form="platformAccountsForm" checked>
+                    </label>
+                </li>
+                <li class="nav-item">
+                    <label for="2gisPlatformRadio" class="platform-radio-label nav-link">
+                        <img class="platform-image my-1" src="{% static 'images/2gisLogo.png' %}">
+                        <input id="2gisPlatformRadio" name="platformRadio" class="d-none" type="radio" value="1" form="platformAccountsForm">
+                    </label>
+                </li>
+                <li class="nav-item">
+                    <label for="googlePlatformRadio" class="platform-radio-label nav-link">
+                        <img class="platform-image my-1" src="{% static 'images/googleLogo.png' %}">
+                        <input id="googlePlatformRadio" name="platformRadio" class="d-none" type="radio" value="2" form="platformAccountsForm">
+                    </label>
+                </li>
+                <li class="nav-item">
+                    <label for="flampPlatformRadio" class="platform-radio-label nav-link">
+                        <img class="platform-image my-1" src="{% static 'images/FlampLogo.png' %}">
+                        <input id="flampPlatformRadio" name="platformRadio" class="d-none" type="radio" value="3" form="platformAccountsForm">
+                    </label>
+                </li>
+                <li class="nav-item">
+                    <label for="zoonPlatformRadio" class="platform-radio-label nav-link">
+                        <img class="platform-image my-1" src="{% static 'images/ZoonLogo.png' %}">
+                        <input id="zoonPlatformRadio" name="platformRadio" class="d-none" type="radio" value="4" form="platformAccountsForm">
+                    </label>
+                </li>
+                <li class="nav-item">
+                    <label for="yellPlatformRadio" class="platform-radio-label nav-link">
+                        <img class="platform-image my-1" src="{% static 'images/YellLogo.png' %}">
+                        <input id="yellPlatformRadio" name="platformRadio" class="d-none" type="radio" value="5" form="platformAccountsForm">
+                    </label>
+                </li>
+            </ul>
+
+            <div id="listProfiles" class="row col-12 mx-0">
+                <div id="listProfiles" class="list-group m-0 col-lg-6 overflow-auto border-start border-bottom border-end overflow-hidden pe-0 rounded-0 rounded-bottom">
+                    <div id="accounts" class="p-0 m-0">
+                        {% for account in accounts %}
+                            <form id="platformAGIF-{{forloop.counter0}}" class="platformAccountGetIdForm d-none" onsubmit="return false;"><input name="accountId" type="hidden" value="{{account.id}}"></form>
+                            <button type="submit" form="platformAGIF-{{forloop.counter0}}" class="platform-accounts platform-{{account.platform}} collapse list-group-item list-group-item-action flex-nowrap border-0 border-bottom">
+                                <div class="row align-items-center p-1">
+                                    <span class="col-4 ps-4 text-muted">Профиль:</span>
+                                    <span class="col-6 text-start">{{account.login}}</span>
+                                    <input type="hidden" id="hiddenNameOrg" value="{{account.name_organization}}">
+                                    <i class="col-1 bi bi-check-circle-fill text-success"></i>
+                                </div>
+                            </button>
+                        {% endfor %}
+                    </div>
+                    <button class="btn btn-light m-1" type="button" data-bs-toggle="collapse" data-bs-target="#collapseAddProfile" aria-expanded="false" aria-controls="collapseAddProfile">
+                        Добавить профиль
+                    </button>
+                    <form id="platformAccountsForm" class="d-none" onsubmit="return false;">{% csrf_token %}</form>
+                    <div class="row g-3 align-items-center justify-content-center py-3 collapse" id="collapseAddProfile">
+                        <div class="col-lg-4 col-8">
+                            <input class="form-control text-truncate" type="text" form="platformAccountsForm" name="login" placeholder="Укажите логин" required>
+                        </div>
+                        <div class="col-lg-4 col-8">
+                            <input class="form-control text-truncate" type="password" form="platformAccountsForm" name="password" placeholder="Укажите пароль" required>
+                        </div>
+                        <button id="addAccount" type="submit" form="platformAccountsForm" class="btn btn-primary col-lg-2 col-6 ms-2"><i class="bi bi-box-arrow-in-left"></i></button>
+                        <div class="row col-12 justify-content-center">
+                            <span class="col mt-3 text-muted text-center" id="messageAuthAccount"></span>
+                        </div>
+                    </div>
+                </div>
+                <div id="listFilials" class="list-group m-0 col-lg-6 border-top border-end border-bottom pe-0">
+                    <a id="chooseProfile" class="list-group-item list-group-item-action active border-0 border-bottom collapse user-select-none" aria-current="true">Филиалы организации: <span id="nameOrganization"></span></a>
+                    <a id="chooseProfileMsg" class="list-group-item list-group-item-action active bg-light text-dark collapse border-0 border-bottom user-select-none" aria-current="true">Выберите профиль чтобы мы подгрузили филиалы</a>
+
+                    <div class="row col-12 justify-content-center">
+                        <div id="spinnerLoadFilials" class="spinner-border m-5 text-secondary collapse" role="status">Загружаем филиалы</div>
+                    </div>
+
+                    <form id="includeFilialsForm" class="d-none" onsubmit="return false;">{% csrf_token %}</form>
+                    <div id="filials" class="collapse">
+                    </div>
+
+                    <button id="addFilials" class="btn btn-light m-1 collapse" type="submit" form="includeFilialsForm">
+                        Подключить выделенные
+                    </button>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    {% include 'footer.html' %}
+
+</body>

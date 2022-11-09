@@ -1,0 +1,143 @@
+/*Классы для управления скроллом*/
+
+/*.parent-container {*/
+/*    overflow-y: auto;*/
+/*    scroll-snap-type: y mandatory;*/
+/*}*/
+
+/*.children {*/
+/*    scroll-snap-align: start;*/
+/*}*/
+
+#btnInstruments {
+    border-top-left-radius: 0px !important;
+    border-top-right-radius: 0px !important;
+}
+
+@media(max-width: 992px) {
+    #instrumentsPanelAuthUser {
+        margin-top: 93px;
+    }
+}
+
+@media(min-width: 992px) {
+    #instrumentsPanelAuthUser {
+        margin-top: 110px;
+    }
+}
+
+#collapseInstruments {
+    margin-top: -2px;
+}
+
+#instrumentsPanelAuthUser > button {
+    height: 30px;
+    font-size: 0.9em;
+    padding-top: 3px;
+}
+
+/*Классы для слоя*/
+img {
+    pointer-events: none;
+
+    /**
+     * Для эксплорера
+     */
+    -ms-user-select: none;
+
+    /**
+     * Для мозилы
+     */
+    -moz-user-select: none;
+
+    /**
+     * Для конкверора
+     */
+    -khtml-user-select: none;
+
+    /**
+     * Для Сафари и Хрома
+     */
+    -webkit-user-select: none;
+}
+#EnterButton {
+    min-width: 30px;
+}
+
+#logOutRow {
+    margin-left: 10px;
+}
+
+#regBlockImg {
+    width: 8%;
+    margin-right: 23px;
+}
+
+.nav-txt {
+    font-size: 0.95em;
+}
+
+.logo-txt {
+    font-size: 0.75em;
+}
+
+#LogoImage, #whiteLogoImage {
+    width: 140px;
+    margin-right: 53px;
+}
+
+.header-layout {
+    margin-top: 10px;
+    margin-left: 100px;
+}
+
+@media (min-width: 992px) {
+    .header-layout {
+        margin-left: 170px;
+    }
+    .alert {
+        margin-top: 110px;
+    }
+}
+
+@media (max-width: 992px) {
+    .header-layout {
+        margin: 30px;
+    }
+    .alert {
+        margin-top: 92px;
+    }
+}
+
+.log-button {
+    padding: 1px 2px 0px 0px;
+    height: 38px;
+    width: 38px;
+}
+
+@media (max-width: 500px) {
+    .log-button {
+        padding: 0.1em 0px 0px 0px;
+    }
+}
+
+@media (min-width: 992px) {
+    .reg-block {
+        padding-left: 606px;
+    }
+}
+
+.log-button > i {
+    font-size: 1.35em;
+}
+
+#vkButtonImage  {
+    padding: 7px 0px 0px 5px;
+    width: 30px;
+    height: 30px;
+    font-size: 1.1em;
+}
+
+#tgButtonImage {
+    font-size: 1.9em;
+}

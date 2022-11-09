@@ -1,0 +1,75 @@
+{% load static %}
+{% include 'head.html' %}
+
+<body>
+    {{ js_file|safe }}
+    {% include 'header_layout.html' %}
+
+    <div class="container col-lg-7 mt-5 pt-5 p-4 justify-content-center">
+        <section id="userInfo" class="row g-2 w-100 pt-2 mt-5 text-start">
+            <div class="col-lg-3 col-12 row g-2 flex-nowrap">
+                <span class="p-1">Количество филиалов:<span class="text-primary p-1 rounded  mx-2">{{ filials|length }}</span></span>
+            </div>
+            <div class="col-lg-3 col-12 row g-2 flex-nowrap">
+                <span class="py-1 col-9 col-lg-12">Тариф:<span class="text-primary p-1 rounded mx-2 text-nowrap">"Репутация под ключ"</span></span>
+            </div>
+            <div class="col-lg-2 col-md-6 col-5 my-2">
+                <a href="" class="btn btn-sm btn-dark text-nowrap mx-1 my-2 rounded-pill bg-gradient">Сменить тариф</a>
+            </div>
+            <hr class="w-100 mx-2 my-2">
+        </section>
+
+        <section id="userFilials" class="row border-0 w-100 px-auto mx-auto mt-2">
+            {% if not filials %}
+                <span class="text-muted mt-5">Вы еще не добавили ни одного проекта</span>
+            {% endif %}
+            {% for filial in filials %}
+                <div class="card mb-3 shadow">
+                    <div class="row g-0 align-items-center">
+                        <div class="col-lg-2 col-4 p-lg-4 pt-4 ps-2">
+                            <img src="{{ filial.logotype }}" height="90" width="90" class="rounded-start filial-image" alt="...">
+                        </div>
+                        <div class="col-lg-6 col-8">
+                            <div class="card-body">
+                                <h6 class="card-title text-primary mt-lg-1 mt-3">{{ filial.platform_account__name_organization }}</h6>
+                                <span>{{ filial.address }}</span>
+                                <div class="form-check form-switch py-lg-2 py-3">
+                                    <form id="chStFil-{{forloop.counter0}}" class="changeStatusFilialForm" onsubmit="return false;">{% csrf_token %}</form>
+                                    {% if filial.status == 1 %}
+                                        <input type="hidden" name="statusFilial" value="2" form="chStFil-{{forloop.counter0}}">
+                                        <input class="status-class form-check-input status-filial" id="switchActiveFilial-{{forloop.counter0}}" type="checkbox" form="chStFil-{{forloop.counter0}}" checked>
+                                        <label class="status-class form-check-label text-primary" for="switchActiveFilial-{{forloop.counter0}}">Активирован</label>
+                                    {% else %}
+                                        <input type="hidden" name="statusFilial" value="1" form="chStFil-{{forloop.counter0}}">
+                                        <input class="status-class status-input form-check-input status-filial" id="switchActiveFilial-{{forloop.counter0}}" type="checkbox" form="chStFil-{{forloop.counter0}}">
+                                        <label class="status-class form-check-label text-muted" for="switchActiveFilial-{{forloop.counter0}}">Невидимый</label>
+                                    {% endif %}
+                                    <input type="hidden" name="idFilial" value="{{filial.id}}" form="chStFil-{{forloop.counter0}}">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-1 col-4 pt-1 pb-lg-0 pb-4">
+                            <a href="{% url 'Rectop:reviews-filial_reviews' idFilial=filial.id %}" class="btn btn-dark position-relative w-100 mt-1 rounded-pill bg-gradient">
+                                Отзывы
+                                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                    99+
+                                <span class="visually-hidden">непрочитанные сообщения</span>
+                                </span>
+                            </a>
+                        </div>
+                        <div class="col-lg-1 col-3 ms-4 pt-1 pb-lg-0 pb-4">
+                            <a id="downloadQr" href="{{filial.qr_code_img_url}}" download="" class="btn btn-sm btn-warning my-auto w-75 mt-1 rounded-pill bg-gradient py-2"><i class="bi bi-qr-code p-1"></i></a>
+                        </div>
+                        <div class="col-lg-1 col-3 ms-1 pt-1 pb-lg-0 pb-4">
+                            <a href="{% url 'Rectop:dashboard-list' idFilial=filial.id %}" class="btn btn-primary my-auto w-75 mt-1 rounded-pill bg-gradient"><i class="bi bi-pencil-square p-1"></i></a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </section>
+
+    </div>
+
+    {% include 'footer.html' %}
+
+</body>

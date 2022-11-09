@@ -1,0 +1,12 @@
+.platform-image {
+    width: 25px;
+    height: 25px;
+}
+
+#editContactDataBtn, #editAuthDataBtn {
+    width: 50px;
+}
+
+.dashboard-content {
+    min-height: 2000px;
+}

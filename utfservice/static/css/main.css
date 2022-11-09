@@ -1,0 +1,96 @@
+/*@font-face {*/
+/*	font-family: 'Gilroy-Light';*/
+/*	font-style: normal;*/
+/*	font-weight: normal;*/
+/*	src: local('Gilroy-Light'),*/
+/*		url('/fonts/Gilroy-Light.woff2') format('woff2'),*/
+/*		url('/fonts/Gilroy-Light.woff') format('woff'),*/
+/*		url('/fonts/Gilroy-Light.ttf') format('ttf'),*/
+/*		url('/fonts/Gilroy-Light.eot') format('eot');*/
+/*}*/
+
+/*@font-face {*/
+/*	font-family: 'Raleway-Medium';*/
+/*	font-style: normal;*/
+/*	font-weight: normal;*/
+/*	src: local('Raleway-Medium'),*/
+/*		url('/fonts/Raleway-Medium.woff2') format('woff2'),*/
+/*		url('/fonts/Raleway-Medium.woff') format('woff'),*/
+/*		url('/fonts/Raleway-Medium.ttf') format('ttf'),*/
+/*		url('/fonts/Raleway-Medium.eot') format('eot');*/
+/*}*/
+
+/*p {*/
+/*    font-family: 'Gilroy-Light';*/
+/*}*/
+
+/*body {*/
+/*    overflow-x: hidden;*/
+/*}*/
+
+.range-btn {
+    height: 18px;
+    padding: 1px 15px 1px 1px;
+}
+
+[type='range'] {
+    margin-top: 5px;
+}
+
+.unner-tarif-block {
+    color: white
+}
+
+#mainCard9 {
+    overflow: none;
+}
+#mainCard9 .question {
+    font-size: 0.86em;
+}
+
+#afterCard1Img, #afterCard6Img {
+    margin-left: -473px;
+    margin-top: -550px;
+    width: 40%;
+}
+
+#mainCard5 .card {
+    margin-top: 100px;
+}
+
+#mainCard1 {
+    max-width: 840px;
+}
+
+#mainCard1 a {
+    width: 157px;
+}
+
+#mainCard2 {
+    margin-top: -310px;
+}
+
+#mainCard2 hr, #mainCard5 hr {
+    height: 2px;
+}
+
+#mainCard4 {
+    margin-top: 100px;
+}
+
+#mainCard7 {
+    margin-top: -190px;
+}
+
+.unner-tarif-block {
+    border-radius: 17px;
+    font-size: 0.9em;
+}
+
+.tarif-block {
+    border-radius: 27px;
+}
+
+.circle-list {
+    font-size: 0.5em;
+}
